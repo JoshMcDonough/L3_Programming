@@ -1,14 +1,15 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html>
 
 <head>
     <title>Flappy bird</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 
 <body>
     <canvas id="gameCanvas" width="600" height="550"> </canvas>
 
+    <script src="player.js"></script>
     <script>
         var canvas, canvasContext;
 
@@ -19,14 +20,29 @@
             setInterval(mainLoop, 1000 / 50);
         }
 
+
+        var xPos = 0;
+        var pxPos = 0;
+        var pyPos = 0;
+        const PLAYER_WIDTH = 30;
+        const PLAYER_HEIGHT = 40;
+        var Xspeed = 0;
+        var Yspeed = 0;
+
+        var bird = new Player(pxPos, pyPos, PLAYER_WIDTH, PLAYER_HEIGHT, "yellow", Xspeed, Yspeed)
+
         function mainLoop() {
             colorRect(0, 0, canvas.width, canvas.height, 'black');
+            bird.playerDraw();
         }
 
         function colorRect(x, y, w, h, c) { // Colorrect function to draw the canvas background
             canvasContext.fillStyle = c;
             canvasContext.fillRect(x, y, w, h);
         }
+
     </script>
 
-</body></html>
+</body>
+
+</html>
