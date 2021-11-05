@@ -1,48 +1,68 @@
     <!DOCTYPE html>
-<html>
+    <html>
 
-<head>
-    <title>Flappy bird</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
-</head>
+    <head>
+        <title>Flappy bird</title>
+        <link rel="stylesheet" type="text/css" href="styles.css">
+    </head>
 
-<body>
-    <canvas id="gameCanvas" width="600" height="550"> </canvas>
+    <body>
+        <canvas id="gameCanvas" width="600" height="550"> </canvas>
 
-    <script src="player.js"></script>
-    <script>
-        var canvas, canvasContext;
+        <script src="player.js"></script>
+        <script>
+            var canvas, canvasContext;
 
-        window.onload = function() {
-            canvas = document.getElementById('gameCanvas');
-            canvasContext = canvas.getContext('2d');
+            window.onload = function() {
+                canvas = document.getElementById('gameCanvas');
+                canvasContext = canvas.getContext('2d');
 
-            setInterval(mainLoop, 1000 / 50);
-        }
+                document.addEventListener('keydown', keyPressed);
+                document.addEventListener('keyup', keyReleased);
+
+                setInterval(mainLoop, 1000 / 50);
+            }
 
 
-        var xPos = 0;
-        var pxPos = 0;
-        var pyPos = 0;
-        const PLAYER_WIDTH = 30;
-        const PLAYER_HEIGHT = 40;
-        var Xspeed = 0;
-        var Yspeed = 0;
+            var xPos = 0;
+            var pxPos = 0;
+            var pyPos = 0;
+            const PLAYER_WIDTH = 30;
+            const PLAYER_HEIGHT = 40;
+            var Xspeed = 0;
+            var Yspeed = 0;
+            const SPACE_KEY = 32;
 
-        var bird = new Player(pxPos, pyPos, PLAYER_WIDTH, PLAYER_HEIGHT, "yellow", Xspeed, Yspeed)
+            var spaceKeyPressed = false;
 
-        function mainLoop() {
-            colorRect(0, 0, canvas.width, canvas.height, 'black');
-            bird.playerDraw();
-        }
+            var yVelocity = -2;
+            var bird = new Player(pxPos, pyPos, PLAYER_WIDTH, PLAYER_HEIGHT, "yellow", Xspeed, Yspeed)
 
-        function colorRect(x, y, w, h, c) { // Colorrect function to draw the canvas background
-            canvasContext.fillStyle = c;
-            canvasContext.fillRect(x, y, w, h);
-        }
+            function mainLoop() {
+                colorRect(0, 0, canvas.width, canvas.height, 'black');
+                bird.playerDraw();
+                bird.playerMove();
+            }
 
-    </script>
+            function colorRect(x, y, w, h, c) { // Colorrect function to draw the canvas background
+                canvasContext.fillStyle = c;
+                canvasContext.fillRect(x, y, w, h);
+            }
 
-</body>
+            function keyPressed(evt) { // Function looking for the space key being pressed down, sets the var spaceKeyPressed to truce once detected  
+                if (evt.keyCode == SPACE_KEY) {
+                    spaceKeyPressed = true;
+                }
+            }
 
-</html>
+            function keyReleased(evt) { // Function looking for the space key being released, sets the var spaceKeyPressed to false once detected  
+                if (evt.keyCode == SPACE_KEY) {
+                    spaceKeyPressed = false;
+                }
+            }
+
+        </script>
+
+    </body>
+
+    </html>
