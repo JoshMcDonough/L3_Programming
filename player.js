@@ -17,7 +17,7 @@ class Player {
 
     }
 
-    playerMove() { // Player movement through the press of space bar
+    playerMove() { 
         this.x = canvas.width / 6;
 
         if (spaceKeyPressed) {
