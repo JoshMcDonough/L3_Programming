@@ -51,13 +51,11 @@
 
             function mainLoop() {
                 if (gameRun == true) {
-                    colorRect(0, 0, canvas.width, canvas.height, 'black'); // Color rect to draw the main canvas 
-                    bird.playerDraw(); // Loading Draw function for the bird 
-                    bird.playerMove(); // Loading Move function for player
-                    //                bird.hasCollided();
-                    //                scoreCorrect();
-                    if (settingUp) { // Code to keep track of pipes, to run draw function 
-                        //makePipes();
+                    colorRect(0, 0, canvas.width, canvas.height, 'black'); 
+                    bird.playerDraw(); 
+                    bird.playerMove(); 
+
+                    if (settingUp) { 
                         for (i = 0; i < pipesTotal; i++) {
                             up();
                             bottom();
@@ -67,12 +65,12 @@
 
                     if (pipes.length > 0) {
                         pipes.forEach(function(pipe, i) {
-                            pipe.pipeDraw(); // Loads pipe draw function
-                            pipe.pipeMove(); // Loads pipe move function 
-                            //                    pipe.score();
-                            if (pipe.x < 0) { // Once pipe has left the canvas delete code , helps reduce stress on game etc 
+                            pipe.pipeDraw(); 
+                            pipe.pipeMove(); 
+
+                            if (pipe.x < 0) { 
                                 delete pipes[i];
-                                //                            score++;
+
                             }
                         });
                         pipes = pipes.filter(item => item !== undefined);
@@ -101,18 +99,18 @@
                 pipePairCount++;
             }
 
-            function colorRect(x, y, w, h, c) { // Colorrect function used to draw the canvas background
+            function colorRect(x, y, w, h, c) { 
                 canvasContext.fillStyle = c;
                 canvasContext.fillRect(x, y, w, h);
             }
 
-            function keyPressed(evt) { // Function looking for the space key being pressed down
+            function keyPressed(evt) { 
                 if (evt.keyCode == SPACE_KEY) {
                     spaceKeyPressed = true;
                 }
             }
 
-            function keyReleased(evt) { // Function looking for the space key being released
+            function keyReleased(evt) { 
                 if (evt.keyCode == SPACE_KEY) {
                     spaceKeyPressed = false;
                 }
