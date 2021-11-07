@@ -17,21 +17,21 @@ class Player {
 
     }
 
-    playerMove (){ // Player movement through the press of space bar
-       this.x = canvas.width / 6;
+    playerMove() { // Player movement through the press of space bar
+        this.x = canvas.width / 6;
 
-        if(spaceKeyPressed){ 
-           this.yspeed = -9;
-//            console.log("jumping");
-           }
+        if (spaceKeyPressed) {
+            this.yspeed = -9;
+        }
+        if (this.y < 0 || this.y + this.h > canvas.height) {
+            this.yspeed = 5;
+        }
+        if (this.y + this.h > canvas.height) {
+            gameRun = false;
+        }
         this.yspeed += 0.5;
         this.y += this.yspeed;
         this.yspeed *= 0.98;
-//        if(this.y < 0 || this.y + this.h > canvas.height) {
-//            gameRun = false;
-//            console.log("Hit top");
-//        }
-    }
-    }
 
-
+    }
+}

@@ -10,6 +10,7 @@
         <canvas id="gameCanvas" width="600" height="550"> </canvas>
 
         <script src="player.js"></script>
+        <script src="pipe.js"></script>
         <script>
             var canvas, canvasContext;
 
@@ -23,39 +24,95 @@
                 setInterval(mainLoop, 1000 / 50);
             }
 
-
+            //Player Variables
             var xPos = 0;
             var pxPos = 0;
             var pyPos = 0;
             const PLAYER_WIDTH = 30;
             const PLAYER_HEIGHT = 40;
-            var Xspeed = 0;
+            var Xspeed = 5;
             var Yspeed = 0;
             const SPACE_KEY = 32;
 
             var spaceKeyPressed = false;
+            var gameRun = true;
+            var settingUp = true;
 
             var yVelocity = -2;
             var bird = new Player(pxPos, pyPos, PLAYER_WIDTH, PLAYER_HEIGHT, "yellow", Xspeed, Yspeed)
 
+            //Pipe Variables
+            var pipes = [];
+            var yRand = 0;
+            var pipesTotal = 99;
+            var pipeCount = 0;
+            var pipePairCount = 0;
+            var Gap = 100;
+
             function mainLoop() {
-                colorRect(0, 0, canvas.width, canvas.height, 'black');
-                bird.playerDraw();
-                bird.playerMove();
+                if (gameRun == true) {
+                    colorRect(0, 0, canvas.width, canvas.height, 'black'); // Color rect to draw the main canvas 
+                    bird.playerDraw(); // Loading Draw function for the bird 
+                    bird.playerMove(); // Loading Move function for player
+                    //                bird.hasCollided();
+                    //                scoreCorrect();
+                    if (settingUp) { // Code to keep track of pipes, to run draw function 
+                        //makePipes();
+                        for (i = 0; i < pipesTotal; i++) {
+                            up();
+                            bottom();
+                        }
+                        settingUp = false;
+                    }
+
+                    if (pipes.length > 0) {
+                        pipes.forEach(function(pipe, i) {
+                            pipe.pipeDraw(); // Loads pipe draw function
+                            pipe.pipeMove(); // Loads pipe move function 
+                            //                    pipe.score();
+                            if (pipe.x < 0) { // Once pipe has left the canvas delete code , helps reduce stress on game etc 
+                                delete pipes[i];
+                                //                            score++;
+                            }
+                        });
+                        pipes = pipes.filter(item => item !== undefined);
+                    }
+                }
             }
 
-            function colorRect(x, y, w, h, c) { // Colorrect function to draw the canvas background
+            function up() {
+                Gap = Math.floor(Math.random() * (250 - 230) + 230);
+                var yPos = 0;
+                var xPos = canvas.width + pipePairCount * Gap;
+                const WIDTH = 60;
+                var height = Math.floor(Math.random() * (200 - 170) + 170);
+                var p = new Pipe(xPos, yPos, WIDTH, height, "red", Xspeed)
+                pipes.push(p);
+            }
+
+            function bottom() {
+                var yPos = canvas.height - Math.floor(Math.random() * ((canvas.height * 0.4) - 100) + 100);
+                var xPos = canvas.width + pipePairCount * Gap;
+                const WIDTH = 60;
+                var height = Math.floor(Math.random() * (300 - 200) + 200);
+                console.log('Gap: ' + Gap + ' pipeCount: ' + pipePairCount + "=" + xPos);
+                var p = new Pipe(xPos, yPos, WIDTH, height, "red", Xspeed)
+                pipes.push(p);
+                pipePairCount++;
+            }
+
+            function colorRect(x, y, w, h, c) { // Colorrect function used to draw the canvas background
                 canvasContext.fillStyle = c;
                 canvasContext.fillRect(x, y, w, h);
             }
 
-            function keyPressed(evt) { // Function looking for the space key being pressed down, sets the var spaceKeyPressed to truce once detected  
+            function keyPressed(evt) { // Function looking for the space key being pressed down
                 if (evt.keyCode == SPACE_KEY) {
                     spaceKeyPressed = true;
                 }
             }
 
-            function keyReleased(evt) { // Function looking for the space key being released, sets the var spaceKeyPressed to false once detected  
+            function keyReleased(evt) { // Function looking for the space key being released
                 if (evt.keyCode == SPACE_KEY) {
                     spaceKeyPressed = false;
                 }
