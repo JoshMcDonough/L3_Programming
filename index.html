@@ -7,6 +7,8 @@
     </head>
 
     <body>
+        <h1>Flappy Bird</h1> <br>
+<!--        <p>Use the spacebar to jump.<br> Avoid the pipes!</p>-->
         <canvas id="gameCanvas" width="600" height="550"> </canvas>
 
         <script src="player.js"></script>
@@ -55,6 +57,7 @@
 
             //Score Variables
             var score = 0;
+            var realScore = 0;
 
             //Pipe Variables
             var pipes = [];
@@ -95,7 +98,6 @@
                     bird.playerMove();
                     bird.hasCollided();
                     scoreCorrect();
-
                     if (settingUp) {
                         for (i = 0; i < pipesTotal; i++) {
                             up();
@@ -116,8 +118,18 @@
                         pipes = pipes.filter(item => item !== undefined);
                     }
                     colorText("Score: " + realScore, 30, 30, '20px Arial', 'white');
+                } else { 
+                    if (realScore >= 50) { 
+                        console.log("high score working");
+                        colorRect(0, 0, canvas.width, canvas.height, 'yellow');  
+                        colorText("Congrats " + username + " you've reached the highscore of: " + realScore, canvas.width / 6, canvas.height / 2, '15px Arial', 'white');
+                    } else { 
+                        colorRect(0, 0, canvas.width, canvas.height, 'black'); 
+                        colorText("Game Over " + username + " your score was: " + realScore, canvas.width / 4, canvas.height / 2, '15px Arial', 'white');
+                        console.log("Else is running");
+                    }
                 }
-            }
+            } //end of func
 
             function up() {
                 Gap = Math.floor(Math.random() * (250 - 230) + 230);
@@ -127,7 +139,7 @@
                 var height = Math.floor(Math.random() * (200 - 170) + 170);
                 var p = new Pipe(xPos, yPos, WIDTH, height, "green", Xspeed)
                 pipes.push(p);
-            }
+            } //end of func
 
             function bottom() {
                 var yPos = canvas.height - Math.floor(Math.random() * ((canvas.height * 0.4) - 100) + 100);
@@ -138,42 +150,42 @@
                 var p = new Pipe(xPos, yPos, WIDTH, height, "green", Xspeed)
                 pipes.push(p);
                 pipePairCount++;
-            }
+            } //end of func
 
             function scoreCorrect() {
                 realScore = score / 2;
 
-            }
+            } //end of func
 
             function colorRect(x, y, w, h, c) {
                 canvasContext.fillStyle = c;
                 canvasContext.fillRect(x, y, w, h);
-            }
+            } //end of func
 
             function colorText(src, x, y, f, c) {
                 canvasContext.fillStyle = c;
                 canvasContext.fillText(src, x, y);
                 canvasContext.font = f;
-            }
+            } //end of func
 
             function drawBg(src, x, y, w, h) {
                 canvasContext.drawImage(src, x, y, w, h);
-            }
+            } //end of func
 
             function keyPressed(evt) {
                 if (evt.keyCode == SPACE_KEY) {
                     spaceKeyPressed = true;
                 }
-            }
+            } //end of func
 
             function keyReleased(evt) {
                 if (evt.keyCode == SPACE_KEY) {
                     spaceKeyPressed = false;
                 }
-            }
+            } //end of func
 
         </script>
-
+        <button onclick="location.reload()"> Play Again</button>
     </body>
 
     </html>
