@@ -17,7 +17,7 @@ class Player {
 
     }
 
-    playerMove() { 
+    playerMove() {
         this.x = canvas.width / 6;
 
         if (spaceKeyPressed) {
@@ -33,5 +33,34 @@ class Player {
         this.y += this.yspeed;
         this.yspeed *= 0.98;
 
+    }
+    pipehit() {
+        if (pxPos + PLAYER_WIDTH == xPos) {
+            gameover = true;
+        }
+    }
+
+    pipeHit(item) {
+        return (this.x <= (item.x + item.w) &&
+                (this.x + this.w) >= item.x) &&
+            (this.y <= (item.y + item.h) &&
+                (this.y + this.h) >= item.y);
+    }
+    hasPipeHit(pipe) {
+        return this.pipeHit(pipe);
+    }
+    hasCollided() {
+        var self = this;
+        var collided = false;
+
+        pipes.forEach(function (pipe, i) {
+            if (self.hasPipeHit(pipe)) {
+
+                if (self.y + self.h > pipe.y && self.y < pipe.y + pipe.h && self.x + self.w > pipe.x && self.w < pipe.x + pipe.w) {
+                    gameRun = false;
+                }
+                collided = true;
+            }
+        });
     }
 }

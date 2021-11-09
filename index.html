@@ -28,7 +28,7 @@
             var xPos = 0;
             var pxPos = 0;
             var pyPos = 0;
-            const PLAYER_WIDTH = 30;
+            const PLAYER_WIDTH = 50;
             const PLAYER_HEIGHT = 40;
             var Xspeed = 5;
             var Yspeed = 0;
@@ -41,6 +41,9 @@
             var yVelocity = -2;
             var bird = new Player(pxPos, pyPos, PLAYER_WIDTH, PLAYER_HEIGHT, "yellow", Xspeed, Yspeed)
 
+            //Score Variables
+            var score = 0;
+
             //Pipe Variables
             var pipes = [];
             var yRand = 0;
@@ -49,13 +52,19 @@
             var pipePairCount = 0;
             var Gap = 100;
 
+            //image Variables
+            var bg = new Image();
+            bg.src = 'images/bg.png';
+
             function mainLoop() {
                 if (gameRun == true) {
-                    colorRect(0, 0, canvas.width, canvas.height, 'black'); 
-                    bird.playerDraw(); 
-                    bird.playerMove(); 
+                    drawBg(bg, 0, 0, canvas.width, canvas.height);
+                    bird.playerDraw();
+                    bird.playerMove();
+                    bird.hasCollided();
+                    scoreCorrect();
 
-                    if (settingUp) { 
+                    if (settingUp) {
                         for (i = 0; i < pipesTotal; i++) {
                             up();
                             bottom();
@@ -65,16 +74,16 @@
 
                     if (pipes.length > 0) {
                         pipes.forEach(function(pipe, i) {
-                            pipe.pipeDraw(); 
-                            pipe.pipeMove(); 
-
-                            if (pipe.x < 0) { 
+                            pipe.pipeDraw();
+                            pipe.pipeMove();
+                            if (pipe.x < 0) {
                                 delete pipes[i];
-
+                                score++;
                             }
                         });
                         pipes = pipes.filter(item => item !== undefined);
                     }
+                    colorText("Score: " + realScore, 30, 30, '20px Arial', 'white');
                 }
             }
 
@@ -84,7 +93,7 @@
                 var xPos = canvas.width + pipePairCount * Gap;
                 const WIDTH = 60;
                 var height = Math.floor(Math.random() * (200 - 170) + 170);
-                var p = new Pipe(xPos, yPos, WIDTH, height, "red", Xspeed)
+                var p = new Pipe(xPos, yPos, WIDTH, height, "green", Xspeed)
                 pipes.push(p);
             }
 
@@ -94,23 +103,38 @@
                 const WIDTH = 60;
                 var height = Math.floor(Math.random() * (300 - 200) + 200);
                 console.log('Gap: ' + Gap + ' pipeCount: ' + pipePairCount + "=" + xPos);
-                var p = new Pipe(xPos, yPos, WIDTH, height, "red", Xspeed)
+                var p = new Pipe(xPos, yPos, WIDTH, height, "green", Xspeed)
                 pipes.push(p);
                 pipePairCount++;
             }
 
-            function colorRect(x, y, w, h, c) { 
+            function scoreCorrect() {
+                realScore = score / 2;
+
+            }
+
+            function colorRect(x, y, w, h, c) {
                 canvasContext.fillStyle = c;
                 canvasContext.fillRect(x, y, w, h);
             }
 
-            function keyPressed(evt) { 
+            function colorText(src, x, y, f, c) {
+                canvasContext.fillStyle = c;
+                canvasContext.fillText(src, x, y);
+                canvasContext.font = f;
+            }
+
+            function drawBg(src, x, y, w, h) {
+                canvasContext.drawImage(src, x, y, w, h);
+            }
+
+            function keyPressed(evt) {
                 if (evt.keyCode == SPACE_KEY) {
                     spaceKeyPressed = true;
                 }
             }
 
-            function keyReleased(evt) { 
+            function keyReleased(evt) {
                 if (evt.keyCode == SPACE_KEY) {
                     spaceKeyPressed = false;
                 }
