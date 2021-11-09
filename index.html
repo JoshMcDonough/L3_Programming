@@ -30,7 +30,7 @@
             var pyPos = 0;
             const PLAYER_WIDTH = 50;
             const PLAYER_HEIGHT = 40;
-            var Xspeed = 5;
+            var Xspeed = 0;
             var Yspeed = 0;
             const SPACE_KEY = 32;
 
@@ -39,6 +39,18 @@
             var settingUp = true;
 
             var yVelocity = -2;
+
+            //Username and Difficulty password
+            var username = '';
+            var userNamePass = false;
+            var difficulty = '';
+
+            if (difficulty == 'easy') { //speed for cars using the random loop
+                Xspeed = 5;
+            } else {
+                Xspeed = 8;
+            }
+
             var bird = new Player(pxPos, pyPos, PLAYER_WIDTH, PLAYER_HEIGHT, "yellow", Xspeed, Yspeed)
 
             //Score Variables
@@ -55,6 +67,26 @@
             //image Variables
             var bg = new Image();
             bg.src = 'images/bg.png';
+
+            while (username == false) {
+                username = prompt('What is your name?');
+                if (username != null && username != '') {
+                    userNamePass = true;
+                } //allows player to input username without skipping
+            }
+
+            if (difficulty != 'easy' || difficulty != 'hard') {
+                var pass = false;
+                while (pass == false) {
+                    difficulty = prompt('What difficulty do you want to play at?', 'easy or hard?');
+                    if (difficulty == null) {
+                        difficulty = '';
+                    }
+                    if (difficulty.toLowerCase() == 'easy' || difficulty.toLowerCase() == 'hard') {
+                        pass = true;
+                    }
+                } //Asks player for difficulty, can't be passed - has to be either easy or hard
+            }
 
             function mainLoop() {
                 if (gameRun == true) {
