@@ -8,7 +8,7 @@
 
     <body>
         <h1>Flappy Bird</h1> <br>
-<!--        <p>Use the spacebar to jump.<br> Avoid the pipes!</p>-->
+        <!--        <p>Use the spacebar to jump.<br> Avoid the pipes!</p>-->
         <canvas id="gameCanvas" width="600" height="550"> </canvas>
 
         <script src="player.js"></script>
@@ -16,7 +16,7 @@
         <script>
             var canvas, canvasContext;
 
-            window.onload = function() {
+            window.onload = function() { // Onload function loads the canvas, sets it to 2d, looks for space key pressed and released and sets the interval to 1000/50
                 canvas = document.getElementById('gameCanvas');
                 canvasContext = canvas.getContext('2d');
 
@@ -91,7 +91,7 @@
                 } //Asks player for difficulty, can't be passed - has to be either easy or hard
             }
 
-            function mainLoop() {
+            function mainLoop() { //Main loop function, used to run all functions listed below on loop, like the bird movement and pipe draw 
                 if (gameRun == true) {
                     drawBg(bg, 0, 0, canvas.width, canvas.height);
                     bird.playerDraw();
@@ -118,67 +118,66 @@
                         pipes = pipes.filter(item => item !== undefined);
                     }
                     colorText("Score: " + realScore, 30, 30, '20px Arial', 'white');
-                } else { 
-                    if (realScore >= 50) { 
+                } else {
+                    if (realScore >= 50) {
                         console.log("high score working");
-                        colorRect(0, 0, canvas.width, canvas.height, 'yellow');  
-                        colorText("Congrats " + username + " you've reached the highscore of: " + realScore, canvas.width / 6, canvas.height / 2, '15px Arial', 'white');
-                    } else { 
-                        colorRect(0, 0, canvas.width, canvas.height, 'black'); 
+                        colorRect(0, 0, canvas.width, canvas.height, 'yellow');
+                        colorText("Congrats " + username + " you've reached the highscore of: " + realScore, canvas.width / 6, canvas.height / 2, '15px Arial', 'black');
+                    } else {
+                        colorRect(0, 0, canvas.width, canvas.height, 'black');
                         colorText("Game Over " + username + " your score was: " + realScore, canvas.width / 4, canvas.height / 2, '15px Arial', 'white');
                         console.log("Else is running");
                     }
                 }
             } //end of func
 
-            function up() {
-                Gap = Math.floor(Math.random() * (250 - 230) + 230);
+            function up() { //Function for the top pipe 
+                Gap = Math.floor(Math.random() * (250 - 230) + 230); //Gap Uses math.random to generate a random distance between gaps, this helps give the game an increased level of diffuculty and keeps the player guessing. Whilst also used to generate height of top and bottom pipes to insure there is a gap between the pipes making it possible. 
                 var yPos = 0;
-                var xPos = canvas.width + pipePairCount * Gap;
-                const WIDTH = 60;
-                var height = Math.floor(Math.random() * (200 - 170) + 170);
-                var p = new Pipe(xPos, yPos, WIDTH, height, "green", Xspeed)
+                var xPos = canvas.width + pipePairCount * Gap; //The xPos is the canvas.width + pipePairCount * Gap, this makes an even amount of pipes for the top and bottom, as the pipeCount increases, this helps keep a track of the number of pipes and keeps them inline together.
+                const WIDTH = 60; // Sets the width of the pipes.
+                var height = Math.floor(Math.random() * (200 - 170) + 170); //Math random to compute a random height, which adds a level of difficulty.
+                var p = new Pipe(xPos, yPos, WIDTH, height, "green", Xspeed); //Pushes the top pipe to the canvas using the pipeDraw function.
                 pipes.push(p);
             } //end of func
 
-            function bottom() {
-                var yPos = canvas.height - Math.floor(Math.random() * ((canvas.height * 0.4) - 100) + 100);
-                var xPos = canvas.width + pipePairCount * Gap;
-                const WIDTH = 60;
-                var height = Math.floor(Math.random() * (300 - 200) + 200);
-                console.log('Gap: ' + Gap + ' pipeCount: ' + pipePairCount + "=" + xPos);
-                var p = new Pipe(xPos, yPos, WIDTH, height, "green", Xspeed)
+            function bottom() { //Function for the bottom pipe
+                var yPos = canvas.height - Math.floor(Math.random() * ((canvas.height * 0.4) - 100) + 100); //Gap Uses math.random to generate a random distance between gaps, this helps give the game an increased level of diffuculty and keeps the player guessing. Whilst also used to generate height of top and bottom pipes to insure there is a gap between the pipes making it possible. 
+                var xPos = canvas.width + pipePairCount * Gap; //The xPos is the canvas.width + pipePairCount * Gap, this makes an even amount of pipes for the top and bottom, as the pipeCount increases, this helps keep a track of the number of pipes and keeps them inline together.
+                const WIDTH = 60; // Sets the width of the pipes.
+                var height = Math.floor(Math.random() * (300 - 200) + 200); //Math random to compute a random height, which adds a level of difficulty.
+                var p = new Pipe(xPos, yPos, WIDTH, height, "green", Xspeed) //Pushes the top pipe to the canvas using the pipeDraw function.
                 pipes.push(p);
-                pipePairCount++;
+                pipePairCount++; //Once both top and bottom pipeDraw functions have ran, it increases the pipeCount by 1, which keeps the two top and bottom parts together, throughout the yPos caculatations. 
             } //end of func
 
-            function scoreCorrect() {
+            function scoreCorrect() { // This function scoreCorrect halves the score to give real score as score is cacualted by pipes crossing canvas, which is two at time.
                 realScore = score / 2;
 
             } //end of func
 
-            function colorRect(x, y, w, h, c) {
+            function colorRect(x, y, w, h, c) { //ColorRect function to draw the endgame canvas for score and highscore.
                 canvasContext.fillStyle = c;
                 canvasContext.fillRect(x, y, w, h);
             } //end of func
 
-            function colorText(src, x, y, f, c) {
+            function colorText(src, x, y, f, c) { //ColorText function draws the text for score and game over 
                 canvasContext.fillStyle = c;
                 canvasContext.fillText(src, x, y);
                 canvasContext.font = f;
             } //end of func
 
-            function drawBg(src, x, y, w, h) {
+            function drawBg(src, x, y, w, h) { //DrawBg function draws bg using image for the background
                 canvasContext.drawImage(src, x, y, w, h);
             } //end of func
 
-            function keyPressed(evt) {
+            function keyPressed(evt) { // Function keypressed is looking for the space key being pressed down, once presses it sets the var spaceKeyPressed to true once detected  
                 if (evt.keyCode == SPACE_KEY) {
                     spaceKeyPressed = true;
                 }
             } //end of func
 
-            function keyReleased(evt) {
+            function keyReleased(evt) { // Function keyReleased looking for the space key being released, this sets the var spaceKeyPressed to false once detected 
                 if (evt.keyCode == SPACE_KEY) {
                     spaceKeyPressed = false;
                 }
