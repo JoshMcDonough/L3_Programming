@@ -17,10 +17,10 @@ class Player {
 
     }//end of func
 
-    playerMove() { //Player movement Function through the press of space bar
+    playerMove() { //If spacekey is pressed increase ySpeed, gives the feeling of falling and gravity 
         this.x = canvas.width / 6;
 
-        if (spaceKeyPressed) { //If spacekey is pressed increase y speed by -9 , helps gives the feeling of falling and gravity to the player  
+        if (spaceKeyPressed) {
             this.yspeed = -9;
         }
         if (this.y < 0 || this.y + this.h > canvas.height) {
