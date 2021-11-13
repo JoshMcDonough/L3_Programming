@@ -123,11 +123,11 @@
                     colorText("Score: " + realScore, 30, 30, '20px Arial', 'white');
                 } else {
                     if (realScore >= 50) {
-                        colorRect(0, 0, canvas.width, canvas.height, 'yellow');
+                        colorRect(0, 0, canvas.width, canvas.height, 'green');
                         colorText("Congrats " + username + " you've reached the highscore of: " + realScore, canvas.width / 6, canvas.height / 2, '15px Arial', 'black');
                     } else {
-                        colorRect(0, 0, canvas.width, canvas.height, 'black');
-                        colorText("Game Over " + username + " your score was: " + realScore, canvas.width / 4, canvas.height / 2, '15px Arial', 'white');
+                        colorRect(0, 0, canvas.width, canvas.height, 'white');
+                        colorText("Game Over " + username + " your score was: " + realScore, canvas.width / 4, canvas.height / 2, '15px Arial', 'black');
                     }
                 }
             } //end of func
