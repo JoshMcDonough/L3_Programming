@@ -10,7 +10,6 @@ class Pipe { //Main class for the pipes
      pipeDraw(){ //Function that draws the pipes on the canvas 
         canvasContext.drawImage(this.src, this.x, this.y, this.w, this.h)   
     }//end of func
-    
      pipeMove(){ //Makes the pipes move from the right side of the screen to the left 
         this.x -= this.xspeed;
     }//end of func    

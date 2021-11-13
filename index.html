@@ -36,7 +36,7 @@
             var xPos = 0;
             var pxPos = 0;
             var pyPos = 0;
-            const PLAYER_WIDTH = 50;
+            const PLAYER_WIDTH = 30;
             const PLAYER_HEIGHT = 40;
             var Xspeed = 0;
             var Yspeed = 0;
@@ -49,13 +49,7 @@
             //Username and Difficulty password
             var username = '';
             var userNamePass = false;
-            var difficulty = '';
-
-            if (difficulty == 'easy') { //speed for cars using the random loop
-                Xspeed = 5;
-            } else {
-                Xspeed = 8;
-            }
+            var diff = '';
 
             var bird = new Player(pxPos, pyPos, PLAYER_WIDTH, PLAYER_HEIGHT, "yellow", Xspeed, Yspeed)
 
@@ -79,24 +73,23 @@
             var pipeUpImg = new Image();
             pipeUpImg.src = 'images/pipeUp.png';
 
-            while (username == false) {
+            if (username == false) {
                 username = prompt('What is your name?');
                 if (username != null && username != '') {
                     userNamePass = true;
                 } //allows player to input username without skipping
             }
 
-            if (difficulty != 'easy' || difficulty != 'hard') {
-                var pass = false;
-                while (pass == false) {
-                    difficulty = prompt('What difficulty do you want to play at?', 'easy or hard?');
-                    if (difficulty == null) {
-                        difficulty = '';
-                    }
-                    if (difficulty.toLowerCase() == 'easy' || difficulty.toLowerCase() == 'hard') {
-                        pass = true;
-                    }
-                } //Asks player for difficulty, can't be passed - has to be either easy or hard
+            while (diff != 'easy' && diff != 'hard') { // Prompt to ask the player for their level of difficulty
+                diff = prompt("What level of difficulty do you want ?", "Easy or Hard") || ''; // Acutal prompt to ask for diffuculty level
+                diff = diff.toLowerCase(); // Code so all responces are aceepted inculding lower case 
+            }
+
+            if (diff == 'easy') { // If statement if answer is = easy , changes the x speed to 2 
+                Xspeed = 5;
+            }
+            if (diff == 'hard') { // If statement if answer is = hard , changes the x speed to 5 
+                Xspeed = 8;
             }
 
             function mainLoop() { //Main loop function, used to run all functions listed below on loop, like the bird movement and pipe draw 
