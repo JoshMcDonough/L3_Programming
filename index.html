@@ -14,6 +14,12 @@
         <script src="player.js"></script>
         <script src="pipe.js"></script>
         <script>
+            window.onkeydown = function(e) { // Code which stops the space key scrolling , this is needed for when the webpage is small because it stops the game glitching
+                var elem = e.target.nodename;
+                if (elem !== 'TEXTAREA' && elem != 'INPUT') {
+                    return !(e.keyCode == 32);
+                }
+            };
             var canvas, canvasContext;
 
             window.onload = function() { // Onload function loads the canvas, sets it to 2d, looks for space key pressed and released and sets the interval to 1000/50
@@ -30,7 +36,7 @@
             var xPos = 0;
             var pxPos = 0;
             var pyPos = 0;
-            const PLAYER_WIDTH = 50;
+            const PLAYER_WIDTH = 30;
             const PLAYER_HEIGHT = 40;
             var Xspeed = 0;
             var Yspeed = 0;
@@ -40,18 +46,10 @@
             var gameRun = true;
             var settingUp = true;
 
-            var yVelocity = -2;
-
             //Username and Difficulty password
             var username = '';
             var userNamePass = false;
-            var difficulty = '';
-
-            if (difficulty == 'easy') { //speed for cars using the random loop
-                Xspeed = 5;
-            } else {
-                Xspeed = 8;
-            }
+            var diff = '';
 
             var bird = new Player(pxPos, pyPos, PLAYER_WIDTH, PLAYER_HEIGHT, "yellow", Xspeed, Yspeed)
 
@@ -65,30 +63,35 @@
             var pipesTotal = 99;
             var pipeCount = 0;
             var pipePairCount = 0;
-            var Gap = 100;
+            var Gap = 0;
 
             //image Variables
             var bg = new Image();
             bg.src = 'images/bg.png';
+            var pipeBottomImg = new Image();
+            pipeBottomImg.src = 'images/pipeBottom.png';
+            var pipeUpImg = new Image();
+            pipeUpImg.src = 'images/pipeUp.png';
 
-            while (username == false) {
+            if (username == false) {
                 username = prompt('What is your name?');
                 if (username != null && username != '') {
                     userNamePass = true;
                 } //allows player to input username without skipping
             }
 
-            if (difficulty != 'easy' || difficulty != 'hard') {
-                var pass = false;
-                while (pass == false) {
-                    difficulty = prompt('What difficulty do you want to play at?', 'easy or hard?');
-                    if (difficulty == null) {
-                        difficulty = '';
-                    }
-                    if (difficulty.toLowerCase() == 'easy' || difficulty.toLowerCase() == 'hard') {
-                        pass = true;
-                    }
-                } //Asks player for difficulty, can't be passed - has to be either easy or hard
+            while (diff != 'easy' && diff != 'hard') { // Prompt to ask the player for their level of difficulty
+                diff = prompt("What level of difficulty do you want ?", "Easy or Hard") || ''; // Acutal prompt to ask for diffuculty level
+                diff = diff.toLowerCase(); // Code so all responces are aceepted inculding lower case 
+            }
+
+            if (diff == 'easy') { // If statement if answer is = easy , changes the x speed to 2 
+                Xspeed = 5;
+                Gap = Math.floor(Math.random() * (250 - 230) + 230);
+            }
+            if (diff == 'hard') { // If statement if answer is = hard , changes the x speed to 5 
+                Xspeed = 8;
+                Gap = 80
             }
 
             function mainLoop() { //Main loop function, used to run all functions listed below on loop, like the bird movement and pipe draw 
@@ -120,38 +123,36 @@
                     colorText("Score: " + realScore, 30, 30, '20px Arial', 'white');
                 } else {
                     if (realScore >= 50) {
-                        console.log("high score working");
                         colorRect(0, 0, canvas.width, canvas.height, 'yellow');
                         colorText("Congrats " + username + " you've reached the highscore of: " + realScore, canvas.width / 6, canvas.height / 2, '15px Arial', 'black');
                     } else {
                         colorRect(0, 0, canvas.width, canvas.height, 'black');
                         colorText("Game Over " + username + " your score was: " + realScore, canvas.width / 4, canvas.height / 2, '15px Arial', 'white');
-                        console.log("Else is running");
                     }
                 }
             } //end of func
 
             function up() { //Function for the top pipe 
-                Gap = Math.floor(Math.random() * (250 - 230) + 230); //Gap Uses math.random to generate a random distance between gaps, this helps give the game an increased level of diffuculty and keeps the player guessing. Whilst also used to generate height of top and bottom pipes to insure there is a gap between the pipes making it possible. 
+//                Gap = Math.floor(Math.random() * (250 - 230) + 230); //Gap Uses math.random to generate a random distance between gaps, this helps give the game an increased level of diffuculty and keeps the player guessing. Whilst also used to generate height of top and bottom pipes to insure there is a gap between the pipes making it possible. 
                 var yPos = 0;
                 var xPos = canvas.width + pipePairCount * Gap; //The xPos is the canvas.width + pipePairCount * Gap, this makes an even amount of pipes for the top and bottom, as the pipeCount increases, this helps keep a track of the number of pipes and keeps them inline together.
-                const WIDTH = 60; // Sets the width of the pipes.
+                const WIDTH = 100; // Sets the width of the pipes.
                 var height = Math.floor(Math.random() * (200 - 170) + 170); //Math random to compute a random height, which adds a level of difficulty.
-                var p = new Pipe(xPos, yPos, WIDTH, height, "green", Xspeed); //Pushes the top pipe to the canvas using the pipeDraw function.
+                var p = new Pipe(pipeUpImg, xPos, yPos, WIDTH, height, "green", Xspeed); //Pushes the top pipe to the canvas using the pipeDraw function.
                 pipes.push(p);
             } //end of func
 
             function bottom() { //Function for the bottom pipe
                 var yPos = canvas.height - Math.floor(Math.random() * ((canvas.height * 0.4) - 100) + 100); //Gap Uses math.random to generate a random distance between gaps, this helps give the game an increased level of diffuculty and keeps the player guessing. Whilst also used to generate height of top and bottom pipes to insure there is a gap between the pipes making it possible. 
                 var xPos = canvas.width + pipePairCount * Gap; //The xPos is the canvas.width + pipePairCount * Gap, this makes an even amount of pipes for the top and bottom, as the pipeCount increases, this helps keep a track of the number of pipes and keeps them inline together.
-                const WIDTH = 60; // Sets the width of the pipes.
+                const WIDTH = 100; // Sets the width of the pipes.
                 var height = Math.floor(Math.random() * (300 - 200) + 200); //Math random to compute a random height, which adds a level of difficulty.
-                var p = new Pipe(xPos, yPos, WIDTH, height, "green", Xspeed) //Pushes the top pipe to the canvas using the pipeDraw function.
+                var p = new Pipe(pipeBottomImg, xPos, yPos, WIDTH, height, "green", Xspeed) //Pushes the top pipe to the canvas using the pipeDraw function.
                 pipes.push(p);
                 pipePairCount++; //Once both top and bottom pipeDraw functions have ran, it increases the pipeCount by 1, which keeps the two top and bottom parts together, throughout the yPos caculatations. 
             } //end of func
 
-            function scoreCorrect() { // This function scoreCorrect halves the score to give real score as score is cacualted by pipes crossing canvas, which is two at time.
+            function scoreCorrect() { //This function scoreCorrect halves the score to give real score as score is cacualted by pipes crossing canvas, which is two at time.
                 realScore = score / 2;
 
             } //end of func
